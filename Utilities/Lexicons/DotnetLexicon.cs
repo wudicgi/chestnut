@@ -11,6 +11,8 @@ namespace WudiStudio.Chestnut.Utilities.Lexicons
 {
     public class DotnetLexion : Lexicon
     {
+        #region 私有变量
+        // to be noticed
         private MetaInfo m_meta_info;
         /// <summary>
         /// 词汇列表
@@ -23,6 +25,7 @@ namespace WudiStudio.Chestnut.Utilities.Lexicons
 
         private string[] m_chars;
         private int[][] m_idxes;
+        #endregion
 
         public MetaInfo MetaInfo
         {

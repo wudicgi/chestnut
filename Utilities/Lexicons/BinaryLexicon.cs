@@ -9,18 +9,47 @@ using WudiStudio.Chestnut.Utilities.Resources;
 
 namespace WudiStudio.Chestnut.Utilities.Lexicons
 {
+    /// <summary>
+    /// 自已定义格式的二进制词典
+    /// </summary>
     public class BinaryLexion : Lexicon
     {
+        #region 私有常量
+        /// <summary>
+        /// 词典文件标识
+        /// </summary>
         private const int LEX_SIGNATURE = 0x58454C42; // BLEX
+        /// <summary>
+        /// 当前词典版本
+        /// </summary>
         private const int LEX_THIS_VERSION = 0x00000001;
 
+        /// <summary>
+        /// 偏移位置信息结束标识符
+        /// </summary>
         private const byte OFS_END = 0;
+        /// <summary>
+        /// 逆向词汇起始位置偏移量标识符
+        /// </summary>
         private const byte OFS_WORDS_BACKWARD = 1;
+        /// <summary>
+        /// 正向词汇起始位置偏移量标识符
+        /// </summary>
         private const byte OFS_WORDS_FORWARD = 2;
+        /// <summary>
+        /// 词汇频率起始位置偏移量标识符
+        /// </summary>
         private const byte OFS_FREQS_WORDS = 3;
+        /// <summary>
+        /// 单字频率起始位置偏移量标识符
+        /// </summary>
         private const byte OFS_FREQS_CHARS = 4;
+        // to be noticed
         private const byte OFS_META_INFO = 255;
+        #endregion
 
+        #region 私有变量
+        // to be noticed
         private MetaInfo m_meta_info;
         /// <summary>
         /// 词汇列表
@@ -30,10 +59,9 @@ namespace WudiStudio.Chestnut.Utilities.Lexicons
         /// 频率列表
         /// </summary>
         private FreqList m_freq_list;
+        #endregion
 
-        //private string[] m_chars;
-        //private int[][] m_idxes;
-
+        #region 属性
         public MetaInfo MetaInfo
         {
             get { return m_meta_info; }
@@ -51,11 +79,20 @@ namespace WudiStudio.Chestnut.Utilities.Lexicons
             get { return m_freq_list; }
             set { m_freq_list = value; }
         }
+        #endregion
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         public BinaryLexion()
         {
         }
 
+        /// <summary>
+        /// 生成一个词典
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="contents">词典所要包含的信息</param>
         public void Build(string path, Contents contents)
         {
             FileStream stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write);
@@ -82,6 +119,7 @@ namespace WudiStudio.Chestnut.Utilities.Lexicons
 
             List<string> words = m_word_list.Words;
 
+            // 逆向词汇
             if ((contents & Contents.WordsBackward) != 0)
             {
                 TrieTree tree_b = new TrieTree();
@@ -117,6 +155,7 @@ namespace WudiStudio.Chestnut.Utilities.Lexicons
                 }
             }
 
+            // 正向词汇
             if ((contents & Contents.WordsForward) != 0)
             {
                 TrieTree tree_f = new TrieTree();
@@ -152,11 +191,13 @@ namespace WudiStudio.Chestnut.Utilities.Lexicons
                 }
             }
 
+            // 词汇频率
             if ((contents & Contents.FreqsWords) != 0)
             {
 //                lex["freqs_words"] = m_freq_list.Words;
             }
 
+            // 单字频率
             if ((contents & Contents.FreqsChars) != 0)
             {
                 writer.BaseStream.Seek(32, SeekOrigin.Begin);

@@ -12,6 +12,9 @@ namespace WudiStudio.Chestnut.Utilities.Resources
     /// </summary>
     public class TrieTree
     {
+        // to be noticed
+        public static int CountNodes = 0;
+
         /// <summary>
         /// Ê÷¸ù
         /// </summary>
@@ -250,7 +253,7 @@ namespace WudiStudio.Chestnut.Utilities.Resources
         {
             m_char = chr;
             m_children = new Dictionary<char, TrieNode>();
-            Global.CountNodes++;
+            TrieTree.CountNodes++;
         }
     }
 }

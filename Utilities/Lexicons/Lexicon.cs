@@ -8,7 +8,7 @@ using WudiStudio.Chestnut.Utilities.Resources;
 namespace WudiStudio.Chestnut.Utilities.Lexicons
 {
     /// <summary>
-    /// 词典内容
+    /// 词典所包含的内容
     /// </summary>
     [Flags]
     public enum Contents
@@ -20,6 +20,9 @@ namespace WudiStudio.Chestnut.Utilities.Lexicons
         All = WordsBackward | WordsForward | FreqsWords | FreqsChars
     }
 
+    /// <summary>
+    /// 词典的接口
+    /// </summary>
     public interface Lexicon
     {
         MetaInfo MetaInfo { get; set; }

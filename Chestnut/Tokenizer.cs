@@ -380,20 +380,38 @@ namespace WudiStudio.Chestnut
             // 计算当前语句开始处的位置
             int pos_base = m_pos - m_buf_len;
 
-            /*
-            if (m_single_mode == SingleMode.Dualize)
-            {
-            */
             // 获取当前词小写形式的字符串
             string word = (new string(m_buf_char, 0, m_buf_len)).ToLower();
+
+            //if (m_single_mode == SingleMode.Dualize)
+            //{
+                int pos = 0;
+                bool lst_is_num = (Char.GetUnicodeCategory(word[0]) == UnicodeCategory.DecimalDigitNumber);
+                for (int i = 0; i <= word.Length; i++)
+                {
+                    if ((i == word.Length) ||
+                        ((Char.GetUnicodeCategory(word[i]) == UnicodeCategory.DecimalDigitNumber) != lst_is_num))
+                    {
+                        string part = word.Substring(pos, i - pos);
+                        // 如果当前词不是噪音词
+                        if (/*(part != word) && */(m_stoptable[part] == null))
+                        {
+                            // 将当前词添加到最终 Tokens 队列中
+                            Debug("Enqueue {0}, {1}, {2}", part, pos_base + pos, pos_base + i);
+                            m_tokens.Add(new Token(part, pos_base + pos, pos_base + i));
+                        }
+                        pos = i;
+                        lst_is_num = !lst_is_num;
+                    }
+                }
+            //}
+            /*
             // 如果当前词不是噪音词
             if (m_stoptable[word] == null)
             {
                 // 将当前词添加到最终 Tokens 队列中
-                Debug("Enqueue {0}, {1}, {2}", new string(m_buf_char, 0, m_buf_len), pos_base, pos_base + m_buf_len);
+                Debug("Enqueue {0}, {1}, {2}", word, pos_base, pos_base + m_buf_len);
                 m_tokens.Add(new Token(word, pos_base, pos_base + m_buf_len));
-            }
-            /*
             }
             */
             /*
